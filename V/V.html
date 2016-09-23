@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body {
+			margin: 0;
+		}
+		.clearFix:after {
+			content: "";
+			display: block;
+			clear: both;
+		}
+		ul {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+		li {
+			position: relative;
+			float: left;
+			width: 50px;
+			height: 50px;
+			font-size: 20px;
+			line-height: 50px;
+			color: #fff;
+			text-align: center;
+			background: red;
+		}
+	</style>
+	<script>
+		window.onload = function (){
+			var btn = document.getElementById("btn");
+			var list = document.getElementsByTagName("ul")[0];
+			var listLi = document.getElementsByTagName("li");
+
+			var i = 0
+			var t = 0;
+			var tMore = 50;
+			btn.onclick = function (){
+				for( ; i < 5 ; i++ ){
+					list.innerHTML = list.innerHTML+'<li class="clearFix">'+i+'</li>';
+					if( t < 150 ){
+						listLi[i].style.top = t+"px";
+						t = t + 50;
+					}else{
+						listLi[i].style.top = tMore+"px";
+						tMore = tMore - 50;
+					}
+				}
+			}
+		}
+	</script>
+</head>
+<body>
+<div>
+	<input type="button" value="点击按钮生成V字型" id="btn"/>
+	<ul></ul>
+</div>
+</body>
+</html>
