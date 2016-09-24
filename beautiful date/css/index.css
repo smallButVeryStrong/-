@@ -1,0 +1,164 @@
+body {
+	margin: 0;
+	color: #575757;
+	
+}
+p {
+	margin: 0;
+}
+strong {
+	font-weight: normal;
+}
+ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+a {
+	text-decoration: none;
+	color: #fff;
+}
+.clearFix:after {
+	content: "";
+	display: block;
+	clear: both;
+}
+
+#calendar {
+	overflow: hidden;
+	width: 100%;
+	background: url(../img/bg.png) no-repeat center 0;
+}
+.calendar {
+	position: absolute;
+	right: 70px;
+	bottom: 0;
+	padding: 90px 7px 20px 13px;
+	width: 336px;
+	background: rgba(224,223,223,0.9);
+	border-radius: 10px;
+}
+.clock {
+	position: absolute;
+	top: -68px;
+	left: 28px;
+	width: 144px;
+	height: 144px;
+	background: url(../img/biao.png) no-repeat 0 0;
+}
+.newTime {
+	padding-left: 10px;
+	height: 70px;
+	font: 34px/70px "宋体";
+}
+.newDate {
+	position: absolute;
+	top: 20px;
+	right: 30px;
+	width: 120px;
+	font-size: 16px;
+	line-height: 26px;
+	font-family: Arial;
+}
+.checkDate {
+	margin-left: -13px;
+	padding-left: 25px;
+	height: 42px;
+	width: 331px;
+	background: #c9c7c8;
+}
+.checkDate strong {
+	font: 18px/42px "宋体";
+}
+.btn {
+	float: right;
+	width: 48px;
+	height: 42px;
+	line-height: 42px;
+	font-size: 30px;
+	text-align: center;
+	cursor: pointer;
+	color: #e15671;
+	font-weight: bold;
+}
+li {
+	float: left;
+	width: 46px;
+	margin-right: 2px;
+}
+.list1 li {
+	height: 34px;
+	font: 16px/46px Arial;
+	text-align: center;
+}
+.list2 li {
+	height: 46px;
+	width: 46px;
+	font: 16px/46px Arial;
+	text-align: center;
+	cursor: pointer;
+	border-radius: 23px;
+}
+.setTime {
+	margin-top: 10px;
+	text-align: center;
+}
+.set {
+	display: inline-block;
+	width: 196px;
+	height: 36px;
+	border: 2px solid #e15671;
+	border-radius: 18px;
+	font: 14px/36px "宋体";
+	color: #e15671;
+	cursor: pointer;
+}
+.nowDateLiStyle {
+	background: #e15671;
+}
+/*更改框css样式*/
+.change {
+	display: none;
+	position: absolute;
+	width: 520px;
+	height: 390px;
+	top: 30px;
+	left: 400px;
+	border-radius: 6px;
+	background: url(../img/tip.png) no-repeat 0 0;
+}
+.change > p {
+	padding-top: 24px;
+	padding-left: 147px;
+	height: 148px;
+	font: 20px/66px "微软雅黑";
+	color: #e15671;
+}
+.changeDate {
+	padding-left: 30px;
+	padding-top: 12px;
+}
+.changeDate > p {
+	height: 48px;
+	line-height: 48px;
+	font-size: 20px;
+}
+.changeP {
+	height: 34px;
+	font: 14px/34px "微软雅黑";
+}
+.changeHM {
+	margin-top: 23px;
+}
+.changBtn {
+	margin-top: 50px;
+}
+.changBtn a {
+	float: right;
+	width: 88px;
+	height: 28px;
+	font: 14px/2 "微软雅黑";
+	text-align: center;
+	margin-right: 20px;
+	border: 1px solid #fff;
+}
