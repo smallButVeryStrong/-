@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title></title>
+		<style>
+			li {
+				list-style: none;
+			}
+			
+			ul,
+			li {
+				padding: 0;
+				margin: 0;
+			}
+			
+			.fold_wrap {
+				width: 1200px;
+				overflow: hidden;
+				margin: 0 auto;
+			}
+			
+			.fold_wrap ul {
+				width: 1200px;
+				height: 260px;
+				margin: 0 auto;
+				overflow: hidden;
+			}
+			
+			.fold_wrap ul li {
+				float: left;
+				width: 130px;
+				height: 260px;
+				position: relative;
+				overflow: hidden;
+				cursor: pointer;
+			}
+		</style>
+		<script src="jquery-2.2.2.min.js"></script>
+		<script>
+			window.onload = function() {
+				var e = $("#sm");//ul
+				var k = e.find("li");//所有的li存在k中
+				var g = k.length;//7
+				var d = e.width();//1200
+				var h = 400;
+				var j = Math.floor((d - h) / (g - 1));//(1200-400)/6 小宽133px
+				var c = d / g;    //c=大宽  171px
+				var f = e[0].getElementsByTagName("li");//所有的li
+				var b = null;
+				var a = null;
+				
+				
+				k.on("mouseover", function() {//给每个li添加移入事件处理程序
+					var l = this;//this指触发mouseover事件的当前的li
+					clearInterval(a);
+					clearInterval(b);
+					b = setInterval(function() {
+						i(l)//传入的l是指当前被移入的li
+					}, 30)
+				});
+				
+				//第一个设置为展开
+				b = setInterval(function() {
+					i(k[0])
+				}, 30);
+
+				function i(r) {//r=当前的li
+					var l = parseInt(r.offsetWidth);//当前li的宽度130
+					//console.log(l)
+					if(l < 400) {
+						var q = 0;
+						
+						for(var n = 0; n < g; n++) {//g=7
+							if(f[n] !== r) {//f是一个所有li的数组，如果li不是当前被移入的li，也就是指其他6个li
+								var m = f[n].offsetWidth,//声明m,存每个li的宽度 m=130
+									  p = 0;//声明p
+									  //console.log(m)
+								if(m > j) {//j是小宽133px
+									p = Math.floor((m - j) / 10);// 幅度
+									
+									p = (p > 0) ? p : 1;
+									
+									console.log(m - p)
+									f[n].style.width = (m - p) + "px";
+								}
+								//console.log(m - p)
+								//console.log(q)
+								
+								q = q + (m - p) //
+								console.log(q)
+							}
+						}
+						//console.log(d-q)
+						var o = d - q;//d=1200-130
+						if(o > 400) {
+							o = 400
+						}
+						r.style.width = o + "px";//设置当前被 移入li的宽度
+					} else {
+						clearInterval(a);
+						clearInterval(b);
+					}
+				}
+				k.on("mouseout", function() {
+					var l = this;
+					clearInterval(a);
+					clearInterval(b);
+					a = setInterval(function() {
+						var m = parseInt(l.offsetWidth);
+						if(m > c) {
+							var q = 0;
+							for(var o = 0; o < g; o++) {//g=7
+								if(f[o] !== l) {
+									var n = f[o].offsetWidth,
+										  p = 0;
+									if(n < c) {//c=171px
+										p = Math.floor((c - n) / 10);
+										p = (p > 0) ? p : 1;
+										f[o].style.width = (n + p) + "px"
+									}
+									q = q + (n + p);
+								}
+								l.style.width = (d - q) + "px"
+							}
+						} else {
+							clearInterval(a);
+							clearInterval(b);
+						}
+					}, 30)
+				})
+			};
+		</script>
+	</head>
+
+	<body>
+		<div class="fold_wrap">
+			<ul class="clearfix" id="sm">
+				<li>
+					<img src="1.jpg">
+				</li>
+				<li>
+					<img src="2.jpg">
+				</li>
+				<li>
+					<img src="3.jpg">
+				</li>
+				<li>
+					<img src="4.jpg">
+				</li>
+				<li>
+					<img src="5.jpg">
+				</li>
+				<li>
+					<img src="6.jpg">
+				</li>
+				<li>
+					<img src="7.jpg">
+				</li>
+			</ul>
+		</div>
+
+	</body>
+
+</html>

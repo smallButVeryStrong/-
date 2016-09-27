@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title></title>
+		<style>
+			li {
+				list-style: none;
+			}
+			
+			ul,
+			li {
+				padding: 0;
+				margin: 0;
+			}
+			
+			.fold_wrap {
+				width: 1200px;
+				overflow: hidden;
+				margin: 0 auto;
+			}
+			
+			.fold_wrap ul {
+				width: 1200px;
+				height: 260px;
+				margin: 0 auto;
+				overflow: hidden;
+			}
+			
+			.fold_wrap ul li {
+				float: left;
+				width: 130px;
+				height: 260px;
+				position: relative;
+				overflow: hidden;
+				cursor: pointer;
+			}
+		</style>
+		<script src="jquery-2.2.2.min.js"></script>
+		<script>
+			$(function(){
+				//初始化状态
+				var allLi = $("li");
+				$("#sm").children().css({
+					"width":1200/7,
+					default:"swing"
+				},300)
+
+				//事件委托 移入li,jpg当前li尺寸变为400，其余宽度变为130
+				var oUl = $("#sm");
+				var onOff = true;
+				oUl.on("mouseover",function(ev){
+					var MaxW = 0;
+					$("li").each(function(index,element){
+						MaxW += $(element).width()
+					})
+					if( MaxW >= 1200 ){
+						var p = MaxW - 1200;
+						$("li").last().width($("li").last().width() - p - 1)
+					}
+					var target = ev.target;
+					if( $(target).is("img") ){
+						$("#sm").children().stop()
+						$(target).parent().animate({
+							width:400,
+							default:"swing"
+						},300);
+						
+						$(target).parent().siblings().animate({
+							width: (1200-400)/6,
+							default:"swing"
+						},300)
+
+					}
+				})
+
+				oUl.on("mouseout",function(ev){
+					var target = ev.target;
+					$("#sm").children().stop()
+					
+					if( $(target).is("img") ){
+						$("#sm").children().animate({
+							"width":1200/7,
+							default:"swing"
+						},300)
+					}
+				})
+			})
+		</script>
+			
+	</head>
+
+	<body>
+		<div class="fold_wrap">
+			<ul class="clearfix" id="sm">
+				<li>
+					<img src="1.jpg">
+				</li>
+				<li>
+					<img src="2.jpg">
+				</li>
+				<li>
+					<img src="3.jpg">
+				</li>
+				<li>
+					<img src="4.jpg">
+				</li>
+				<li>
+					<img src="5.jpg">
+				</li>
+				<li>
+					<img src="6.jpg">
+				</li>
+				<li>
+					<img src="7.jpg">
+				</li>
+			</ul>
+		</div>
+
+	</body>
+
+</html>
