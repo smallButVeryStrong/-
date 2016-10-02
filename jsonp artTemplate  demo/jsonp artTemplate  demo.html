@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>书籍搜索-搜索</title>
+	<style>
+	body{font-family: '宋体';}
+	input,ul,h2,p{margin:0;padding:0;}
+	img{border:none;vertical-align: top;}
+	a{text-decoration: none;color:#333;}
+	.wrap{width:960px;margin:0 auto;}
+	.text{width:300px;height:34px;border:1px solid #7c1;margin: 30px 10px 30px 50px;text-indent:5px;color:#ccc;font:14px/34px "宋体";}
+	.btn{width:100px;height:30px;padding:3px;border:1px solid #333;}
+	#detail{font:14px/20px "宋体";color:#333;text-indent: 20px;}
+	#list{padding-left:10px;}
+	.book{height:180px;padding:10px 20px;border-bottom: 1px solid #ccc;clear:both;}
+	.book h2{height:30px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font:20px/30px "宋体";color:#333;margin-bottom:5px;}
+	.bookInf{zoom:1;padding-top:10px;}
+	.bookInf:after{content:"";display:block;clear:both;}
+	.pic{float:left;width:120px;height:120px;margin-right: 20px;}
+	.pic img{width:100px;height:120px;}
+	.inf{float:left;width:780px;}
+	.inf p{font-size:12px;line-height: 20px;color:#555;}
+	.inf .summary{height:110px;margin-top:5px;overflow:auto;font-size: 12px;line-height: 20px;text-indent: 2em;color:#999;}
+
+	#page{margin:10px auto;}
+	#page a{display:inline-block;width:38px;padding:5px 0;height:26px;margin:0 8px;border:1px solid #999;font:bold 14px/26px "宋体";color:#000;text-align: center;background:#f1f1f1;}
+	#page .current{background:#F90;}
+	#page .pageF,#page .pageL{width:60px;}
+	
+	</style>
+	<!--引入模板引擎artTemplate 原生语法-->
+	<script src="./js/template-native.js"></script>
+	<!--模板引擎结构-->
+	<script type="text/html" id="temp">
+		<!--模板引擎中生成变量的方法-->
+		<% var books = books %>
+		<!--模板引擎中for循环-->
+		<%for( var i = 0;i < books.length;i++ ){%>
+			 <div id="list" class="wrap">
+				<div class="book">
+					<h2>
+						<a href="<%=books[i].alt%>"><%=books[i].title%>
+						</a>
+					</h2>
+					<div class="bookInf">
+						<div class="pic"> 
+							<a href="<%=books[i].alt%>" target="_blank">
+								<img src="<%=books[i].image%>">
+							</a>
+						</div>
+						<div class="inf">
+							<p>
+								<% var len = books[i].author.length %>
+
+								<% for( var j = 0;j < len;j++ ){%>
+									<%=books[i].author[j]%>
+									<!--模板引擎中判断语句-->
+									<% if( j < len - 1 ){ %>
+									、
+									<% } %>
+								<% } %>
+								 / <%=books[i].publisher%> /<%=books[i].pubdate%>
+							</p>
+							<p class="summary"><%=books[i].summary%></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		<%}%>
+		<!--嵌入子模板-->
+		<%include("pageTemp")%>
+	</script>
+	<!--模板引擎中子模板-->
+	<script type="text/html" id="pageTemp">
+		<p id="page" class="wrap">
+			<a href="javascript:;" class="pageF">上一页</a>
+			<% for( var i = 0; i < pageFn(total) ;i++){%>
+				<a href="javascript:;"><%= (i + 1)%></a>
+			<%} %>
+			<a href="javascript:;" class="pageF">下一页</a>
+		</p>
+	</script>
+	<script>
+		//添加辅助方法
+		template.helper("pageFn",function(total){
+			var pageNum = Math.ceil(total/20);
+			if( pageNum > 10 ) pageNum = 10;
+			return pageNum;
+		})
+		var num = 0;
+		//此为callback函数，豆瓣接口会返回搜索的数据，在fn里边用参数的方式接收
+		function fn(data){
+			//应用artTemplate模板引擎生成相应的结构
+			var  html = template("temp",data);
+			//将结构放入相应的容器中，病在网页中显示出来
+			content.innerHTML = html;
+
+			//点击之后生成网页，给网页添加点击事件处理
+			
+			var  page = document.getElementById("page");
+			var allPageA = page.getElementsByTagName("a");
+			var len = allPageA.length;
+			
+			//addEvenListener绑定事件处理
+			page.addEventListener("click",function(ev){
+
+				var target = ev.target;
+				
+				if( target.nodeName == "A" ){//如果点击的是a 标签
+
+					if( target != allPageA[0] && target != allPageA[ len - 1 ] ){//除了第一个和最后一个
+						num = target.innerHTML;//num值就是点击变迁的内容
+					}
+					if( target == allPageA[0]  ){//如果是第一个标签就减1
+						num = num - 1
+						if( num < 1 ){
+							num = 1
+						}
+					}
+					if( target == allPageA[ len - 1 ]  ){//如果是最后一个标签就加1
+						num = num + 1
+						if( num > len - 2 ){
+							num = len - 2
+						}
+					}
+					//生成script标签
+					var script = document.createElement("script");	
+					//有豆瓣接口请求数据start是开始页码 count是请求的数量
+					script.src = 'https://api.douban.com/v2/book/search?count=10&start='+(num - 1) * 20+'&callback=fn&q='+text.value;
+					//把script标签放到body里边 生成html结构
+					document.body.appendChild(script);
+					//用完之后直接删除该标签
+					document.body.removeChild(script);
+				}
+
+			},false)
+
+		}
+		window.onload = function(){
+			btn.onclick = function(){
+				//点击 生成script标签
+				var script = document.createElement("script");
+				//callback回调函数 返回数据	q是必写的，是要搜索的数据
+				script.src = 'https://api.douban.com/v2/book/search?count=10&callback=fn&q='+text.value;
+				//把script标签放到结构里边
+				document.body.appendChild(script);
+				//生成相应的结构之后	直接删除该script标签
+				document.body.removeChild(script);
+			}
+		}
+	</script>
+</head>
+<body>
+	<div class="wrap">
+		<input type="text" id="text" class="text" value="JavaScript权威指南">
+		<input type="button" id="btn" class="btn" value="搜索相关书籍">
+		<p id="detail"></p>
+	</div>
+	<hr>
+	<div id="content">
+		
+		<!-- <div id="list" class="wrap">
+			小提示：在框中输入要查询的书名，点击搜索按钮就能查询呦~
+			<div class="book"><h2><a href="https://book.douban.com/subject/6526452">Git权威指南</a></h2><div class="bookInf"><div class="pic"> <a href="content.html?id=2228378"><img src="https://img3.doubanio.com/mpic/s6523000.jpg"></a></div><div class="inf"><p>蒋鑫 / 机械工业出版社华章公司 / 2011-6-27</p><p class="summary">《Git权威指南》</p></div></div></div>
+			</div>
+		</div> -->
+		<!-- <p id="page" class="wrap">
+			<a href="" class="pageF">上一页</a>
+			<a href="">1</a>
+			<a href="">2</a>
+			<a href="">3</a>
+			<a href="" class="pageF">下一页</a>
+		</p> -->
+	</div>
+</body>
+</html>
