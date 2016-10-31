@@ -1,0 +1,340 @@
+/* css reset   样式初始化*/
+
+body {
+	margin: 0;
+	overflow: hidden;
+	font: 16px/1 STHeiti, "Microsoft Yahei", Helvetica, Verdana, sans-serif;
+	color: #000;
+	background: #fff;
+}
+h1 {
+	margin: 0;
+	font-weight: none;
+}
+ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+a {
+	text-decoration: none;
+	outline: 0;
+	color: #333;
+}
+.clearFix:after {
+	content: "";
+	display: block;
+	clear: both;
+}
+
+/*   animate 关键帧--------------------------------------- */
+
+@keyframes header {
+	0% {
+		transform: translateY(-48px);
+	}
+	100% {
+		transform: translateY(0);
+	}
+}
+
+@keyframes slidebar {
+	0% {
+		transform: translateX(54px);
+	}
+	100% {
+		transform: translateY(0);
+	}
+}
+
+/* content 点击切换page按钮 */
+@keyframes fadein {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes arrow {
+	0% {
+		transform: translateY(0);
+	}
+	100% {
+		transform: translateY(10px);
+	}
+}
+/* stage-1 打开页面初始动画部分--------------------------------------- */
+@keyframes first-1 {
+	0% {
+		opacity: 0;
+		top: 38.57%;
+		transform: scale(0.1)
+	}
+	100% {
+		opacity: 1;
+		top: 0;
+		transform: scale(1)
+	}
+}
+
+@keyframes title-chars-1 {
+	0% {
+		transform: translateY(200px)
+	}
+	100% {
+		transform: translateY(0)
+	}
+}
+
+@keyframes fadein-from-bottom {
+	0% {
+		opacity: 0;
+		transform: translateY(300px)
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0)
+	}
+}
+
+@keyframes title-chars-2 {
+	0% {
+		transform: translateY(150px)
+	}
+	100% {
+		transform: translateY(0)
+	}
+}
+
+@keyframes title-chars-3 {
+	0% {
+		transform: translateY(100px)
+	}
+	100% {
+		transform: translateY(0)
+	}
+}
+
+@keyframes title-chars-4 {
+	0% {
+		transform: translateY(50px)
+	}
+	100% {
+		transform: translateY(0)
+	}
+}
+
+@keyframes title-chars-5 {
+	0% {
+		transform: translateY(30px)
+	}
+	100% {
+		transform: translateY(0)
+	}
+}
+/* 齿轮5动画---------------*/
+
+@keyframes cycle {
+	0% {
+		transform: rotateZ(0);
+	}
+	100% {
+		transform: rotateZ(360deg);
+	}
+}
+@keyframes cycle-anticlockwise {
+	0% {
+		transform: rotateZ(360deg);
+	}
+	100% {
+		transform: rotateZ(0);
+	}
+}
+
+/*---------------------stage-2动画------------------*/
+
+@keyframes slide-tr {
+	0% {
+		transform: translate(6px, -6px)
+	}
+	100% {
+		transform: translate(0, 0)
+	}
+}
+
+@keyframes popup-tr {
+	0% {
+		background: #a1e966;
+		left: 5.625em;
+		bottom: 5.5em
+	}
+	25% {
+		background: #a1e966;
+		left: 2.96875em;
+		bottom: 2.96875em
+	}
+	50% {
+		background: #37e5fa;
+		left: -.3125em;
+		bottom: 5.5em
+	}
+	75% {
+		background: #37e5fa;
+		left: 2.96875em;
+		bottom: 2.96875em
+	}
+	100% {
+		background: #ff764c;
+		left: 5.625em;
+		bottom: 5.5em
+	}
+}
+
+@keyframes slide-bl {
+	0% {
+		transform: translate(-6px, 6px)
+	}
+	100% {
+		transform: translate(0, 0)
+	}
+}
+
+@keyframes popup-bl {
+	0% {
+		background: #37e5fa;
+		bottom: -1.125em;
+		right: .9375em
+	}
+	25% {
+		background: #37e5fa;
+		bottom: 1.75em;
+		right: 1.34375em
+	}
+	50% {
+		background: #ff764c;
+		bottom: 1.75em;
+		right: 5.3125em
+	}
+	75% {
+		background: #ff764c;
+		bottom: 1.75em;
+		right: 1.34375em
+	}
+	100% {
+		background: #a1e966;
+		bottom: -1.125em;
+		right: .9375em
+	}
+}
+
+@keyframes slide-br {
+	0% {
+		transform: translate(6px, 6px)
+	}
+	100% {
+		transform: translate(0, 0)
+	}
+}
+
+@keyframes popup-br {
+	0% {
+		background: #ff764c;
+		top: 3.15625em;
+		left: 3.5em
+	}
+	25% {
+		background: #ff764c;
+		top: 1.875em;
+		left: 1.625em
+	}
+	50% {
+		background: #a1e966;
+		top: 1.625em;
+		left: 5.375em
+	}
+	75% {
+		background: #a1e966;
+		top: 1.875em;
+		left: 1.625em
+	}
+	100% {
+		background: #37e5fa;
+		top: 3.15625em;
+		left: 3.5em
+	}
+}
+
+@keyframes slide-tl {
+	0% {
+		transform: translate(-6px, -6px)
+	}
+	100% {
+		transform: translate(0, 0)
+	}
+}
+
+/*---------------------stage-4样式------------------*/
+
+@keyframes ball-1 {
+	0% {
+	opacity: 0;
+	transform: translateY(-18.75em);
+	}
+	50% {
+	opacity: 1;
+	}
+	100% {
+	opacity: 1;
+	transform: translateY(0);
+	}
+}
+
+@keyframes ball-2 {
+	0% {
+	transform: translateY(0);
+	}
+	100% {
+	transform: translateY(-3.125em);
+	}
+}
+
+@keyframes ball-3 {
+	0% {
+	transform: translateY(-3.125em);
+	}
+	100% {
+	transform: translateY(0);
+	}
+}
+
+@keyframes ball-4 {
+	0% {
+	transform: translateY(0);
+	}
+	100% {
+	transform: translateY(-1.25em);
+	}
+}
+
+@keyframes ball-5 {
+	0% {
+	transform: translateY(-1.25em);
+	}
+	100% {
+	transform: translateY(0);
+	}
+}
+
+/* 底部样式-------------------------------------------------------- */
+
+@keyframes footer {
+	0% {
+		transform: translateY(50px);
+	}
+	100% {
+		transform: translateY(0);
+	}
+}
+
