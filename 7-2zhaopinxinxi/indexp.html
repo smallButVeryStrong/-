@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    a {
+        text-decoration: none;
+    }
+
+    .clearfix:after {
+        content: "";
+        display: block;
+        clear: both;
+    }
+    .clearfix {
+        zoom: 1;
+    }
+    #main {
+        width: 800px;
+        height: 800px;
+        border: 1px dashed #000;
+        margin: 0 auto;
+    }
+    #pageBox span,
+    #pageBox a {
+        width: 50px;
+        height: 20px;
+        text-align: center;
+        background-color: #666;
+        margin: 0 5px;
+        cursor: pointer;
+    }
+    #pageBox span {
+        display: inline-block;
+    }
+    #pageBox span.actColor {
+        background-color: red;
+    }
+    #pageBox a {
+        float: left;
+        color: #fff;
+    }
+    #pages {
+        float: left;
+    }
+    #info .block span {
+        padding: 20px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+    #info .gays {
+        padding: 20px;
+        color: #666;
+    }
+    #info .gays a {
+        font-size: 12px;
+        padding: 10px;
+        color: #328fbe;
+    }
+    #leftBox {
+        width: 100px;
+        float: left;
+        text-align: center;
+    }
+    #leftBox a {
+        display: block;
+        line-height: 50px;
+        background-color: #ccc;
+        margin-bottom: 10px;
+    }
+    #leftBox a.red {
+        background-color: red;
+        color: #fff;
+    }
+    #rightBox {
+        width: 700px;
+        float: right;
+    }
+    #rightBox h3 {
+        line-height: 50px;
+        background-color: yellow;
+        width: 100px;
+        text-align: center;
+    }
+    </style>
+    <script type="text/javascript" src="data.js"></script>
+    <script type="text/javascript" src="getTag.js"></script>
+    <script>
+    	window.onload = function(){
+    		var leftBox = $("#leftBox");
+    		var leftBoxA = $("a",leftBox);
+    		var rightBox = $("#rightBox");
+    		var title = $("h3")[0];
+    		var pages = $("#pages");
+    		var info = $("#info");
+    		//获取生成的pages下边的span
+    		var message = 0;
+    		var search = window.location.search;
+            //判断是不是有search,根据search值得有无来判断加载哪一组数据
+    		if( !search ){
+    			search = "world";
+    		}else{
+    			search = search.slice(1);
+    		}
+    		//标题
+    		if( search == "school" ){
+    			title.innerHTML = leftBoxA[1].innerHTML;
+    		}else{
+    			title.innerHTML = leftBoxA[0].innerHTML;
+    		}
+    		//生成机构的函数 initial初始化
+    		var hash = window.location.hash;
+            //判断hash值是不是存在，用来记录当前页码
+    		if( !hash ){
+    			hash = 0;
+    		}else{
+    			hash = hash.split("=")[1].trim();
+    		}
+    		//时刻更新message
+    		message = Number(hash);
+            //封装函数 生成结构 其中参数h代表第几页
+    		function contentHTML(h){
+	    		var str = "";
+	    		for( var i = 0;i < 5;i++ ){
+	    			if( !data[search][h+i] ) break;
+	    			str += '<p class="block"><span>'+data[search][h+i].num+'</span><span>职位需求：'+data[search][h+i].job+'</span><span>需求人数：'+data[search][h+i].pNum+'名</span><span>'+data[search][h+i].data+'</span></p><p class="gays">'+data[search][h+i].ask+'<a href="javascript:void(0);">【查看详情】</a></p>'
+	    		}
+	    		return str;
+    		}
+            //生成html结构，其中hash是字符串形式，一次要转一下
+    		info.innerHTML = contentHTML(Number(hash)*5);
+            //计算当前的数据总共需要多少个页面
+    		var dataLength = Math.ceil(data[search].length/5);
+    		var pagesStr = "";
+            //渲染页码
+    		for( var i = 0;i < dataLength;i++ ){
+    			pagesStr += '<span>'+(i+1)+'</span>';
+    		}
+    		pages.innerHTML = pagesStr;
+    		//获取元素span
+    		var pagesSpan = $("span",pages);
+    		//给第一个span加默认样式
+    		pagesSpan[hash].className = "actColor";
+    		//点击页码 重新渲染当前页出现的内容
+    		for( var i = 0;i < pagesSpan.length;i++ ){
+    			pagesSpan[i].index = i;
+    			pagesSpan[i].onclick = function(){
+    				//记录已经渲染到那个数据了
+    				var h = this.index * 5;
+    				info.innerHTML = "";
+    				for( var j = 0;j < pagesSpan.length;j++ ){
+    					pagesSpan[j].className = "";
+    				}
+    				this.className = "actColor";
+    				info.innerHTML = contentHTML(h);
+    				message = h/5;
+    				window.location.hash = "#pages = " + this.index;
+    			}
+    		}
+    		//获取prev 和 next 按钮
+    		var prev = $("#prev");
+    		var next = $("#next");
+    		prev.onclick = function(){
+    			info.innerHTML = "";
+    			if( message >= 1 ){
+    				message -= 1;
+    			}
+    			info.innerHTML = contentHTML(message*5);
+    			for( var j = 0;j < pagesSpan.length;j++ ){
+    				pagesSpan[j].className = "";
+    			}
+    			pagesSpan[message].className = "actColor";
+                //重置hash值
+                window.location.hash = "#pages = " + message;
+    		}
+    		next.onclick = function(){
+    			console.log(message)
+    			info.innerHTML = "";
+    			if( message < dataLength - 1 ){
+    				message += 1;
+    			}
+    			info.innerHTML = contentHTML(message*5);
+    			for( var j = 0;j < pagesSpan.length;j++ ){
+    				pagesSpan[j].className = "";
+    			}
+    			pagesSpan[message].className = "actColor";
+                //重置hash值
+                window.location.hash = "#pages = " + message;
+    		}
+    	}
+    </script>
+</head>
+<body>
+    <div id="main">
+        <div id="leftBox">
+            <a href="?world">社会招聘</a>
+            <a href="?school">校园招聘</a>
+        </div>
+        <div id="rightBox">
+            <h3></h3>
+            <div id="info">
+            	<!-- <p class="block">
+	                	<span>1</span>
+	                	<span>职位需求：社会招聘</span>
+	                	<span>需求人数：2名</span>
+	                	<span>2014-04-10</span>
+                	</p>
+                	<p class="gays">岗位要求：1)helpdesk支持；2)熟悉计算机软、硬件及网络维护；3)有相关工作经验，态度端正；4)有一定的服务意识<a href="javascript:void(0);">【查看详情】</a></p> -->
+            </div>
+            <div id="pageBox" class="clearfix">
+                <a href="javascript:;" id="prev">prev</a>
+                <div id="pages">
+                	<!-- <span class="actColor">1</span> -->
+                </div>
+                <a href="javascript:;" id="next">next</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
