@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>星星评级</title>
+	<style>
+	body {
+		margin: 0;
+	}
+	strong {
+		display: inline-block;
+		font-size: 20px;
+		line-height: 50px;
+		vertical-align: middle;
+	}
+	img {
+		vertical-align: middle;
+		border: none;
+	}
+	em {
+		font-style: normal;
+	}
+	section {
+		margin: 30px auto 0;
+		width: 560px;
+	}
+	#box {
+		font-size: 0;
+		position: relative;
+		height: 50px;
+		border: 1px solid #000;
+	}
+	time {
+		display: inline-block;
+		font-size: 20px;
+		line-height: 50px;
+		vertical-align: middle;
+	}
+	em {
+		position: absolute;
+		bottom: 5px;
+		right: 20px;
+		width: 240px;
+		height: 40px;
+		background: url(prompt.png) no-repeat;
+	}
+	</style>
+	<script>
+		window.onload = function (){
+			var obox = document.getElementById("box");
+			var imgs = document.getElementsByClassName("imgs");
+			var con = document.getElementsByClassName("con")[0];
+			var prompt = document.getElementsByClassName("prompt")[0];
+			var arr = ["很差","较差","还行","推荐","力荐"];
+			//定义参数  记录点击的下标
+			var message;
+			//鼠标移入 提示框消失
+			obox.onmouseover = function (){
+				prompt.style.display = "none";
+				box.style.cursor = "pointer";
+			}
+			//鼠标移出 提示框显示
+			obox.onmouseout = function (){
+				prompt.style.display = "block";
+			}
+
+			for(var i = 0; i<imgs.length; i++){
+				imgs[i].index = i;
+				//鼠标移入
+				imgs[i].onmouseover = function (){
+					//全部清空
+					for(var n=0;n<imgs.length;n++){
+						imgs[n].src = "star1.png";
+					}
+					if(this.index<=1){//前两张显示灰色图片
+						for(var j = 0;j<=this.index;j++){
+							imgs[j].src = "star2.png";
+							con.innerHTML = arr[j];
+						}
+					}else{//如果鼠标移入后三张 则显示高亮图片
+						for(var j = 0;j<=this.index;j++){
+							imgs[j].src = "star3.png";
+							con.innerHTML = arr[j];
+						}
+					}
+				}
+				//鼠标移出
+				imgs[i].onmouseout = function (){
+					//全部清空
+					for(var n = 0; n<imgs.length; n++){
+						imgs[n].src = "star1.png";
+						con.innerHTML = "亲，你现在还没有评价！";
+					}
+					//如果鼠标没有点击 则 message 为 undefinde 因此for循环不执行  当鼠标点击之后 message显示的为的下标值，然后进行判断 具体显示第几张图片
+					for(var m =0;m<=message;m++){
+						if(message<2){
+							imgs[m].src = "star2.png"; 
+							con.innerHTML = arr[message];
+						}else{
+							imgs[m].src = "star3.png";
+							con.innerHTML = arr[message];
+						}
+					}
+				}
+				//鼠标点击  记录下标
+				imgs[i].onclick = function (){
+					message = this.index;
+				}
+			}
+		}
+	</script>
+</head>
+<body>
+<section>
+	<input type="button" value="提交"/>
+	<div id="box">
+		<strong>总体评价：</strong>
+		<img src="star1.png" class="imgs">
+		<img src="star1.png" class="imgs">
+		<img src="star1.png" class="imgs">
+		<img src="star1.png" class="imgs">
+		<img src="star1.png" class="imgs">
+		<time class="con">亲，你现在还没有评价！</time>
+		<em class="prompt"></em>
+	</div>
+</section>
+</body>
+</html>
