@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+	#div1{
+		height:50px;
+		width:480px;
+		border: 1px solid black;
+		margin:200px auto 0;
+		position: relative;
+	}
+	p{
+		position: absolute;
+		height:50px;
+		width:480px;
+		margin: 0;
+		top:0;
+	}
+	span{
+		font-size: 28px;
+		font-weight: bold;
+		padding: 0 5px;
+		line-height: 50px;
+		position: relative;
+		top:0;
+		opacity: 1;
+	}
+	#div2{
+		height: 100%;
+		width:0;
+		background-color: blue;
+		opacity: 0;
+		position: relative;
+		z-index: 0;
+	}
+	</style>
+	<script src="tools.js"></script>
+	<script src="MTween3.js"></script>
+	<script>
+		window.onload = function(){
+			var div2 = document.getElementById("div2");
+			var allSpan = document.getElementsByTagName("span");
+			var onoff = true;
+			document.onclick = function(){
+				if( !onoff ) return;
+				onoff = false;
+				MTween(div2,{width:480,opacity:1},1000,"linear",function(){
+					div2.style.width = 0;
+					div2.style.opacity = 0;
+				});
+				for( var i = 0;i < allSpan.length;i++ ){
+					fn(i);
+				}
+				function fn(x){
+					setTimeout(function(){
+						MTween(allSpan[x],{top:-200,opacity:0},500,"linear",function(){
+							if( x == allSpan.length-1 ){
+								for( var j = 0;j < allSpan.length;j++ ){
+									allSpan[j].style.top = 0;
+									allSpan[j].style.opacity = 1;
+								}
+								onoff = !onoff;
+							}
+						});
+					},x*100);
+				}
+			}
+		}
+	</script>
+</head>
+<body>
+	<div id="div1">
+		<div id="div2"></div>
+		<p>
+			<span>+1</span>
+			<span>+1</span>
+			<span>+1</span>
+			<span>+1</span>
+			<span>+1</span>
+			<span>+1</span>
+			<span>+1</span>
+			<span>+1</span>
+			<span>+1</span>
+			<span>+1</span>
+		</p>
+	</div>
+</body>
+</html>
