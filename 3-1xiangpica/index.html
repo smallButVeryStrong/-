@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>擦图片</title>
+	<style>
+		#box {
+			margin: 30px auto;
+			position: relative;
+			width: 600px;
+			height: 600px;
+			background: url(pic.jpg) no-repeat;
+			background-size: 100% 100%;
+		}
+		#box div {
+			position: absolute;
+			width: 46px;
+			height: 46px;
+			border: 2px solid yellow;
+		}
+		#box div em {
+			content: "";
+			position: absolute;
+			top: -2px;
+			left: -2px;
+			width: 60px;
+			height: 60px;
+			background: red;
+		}
+	</style>
+	<script>
+		window.onload = function(){
+			var box = document.getElementById("box");
+			//用TagName方法获取元素 TagName能够动态获取
+			var divAfter = document.getElementsByTagName("em");
+			//定义一个空变量 将生成的div放到str里边
+			var str = "";
+			//运用for循环 生成100个div
+			for( var i = 0 ; i < 100 ; i++ ){
+				var l = i % 10;
+				var t = Math.floor(i / 10);
+				str += '<div style="left:'+l*60+'px;top:'+t*60+'px;"><em style="opacity:1"></em></div>';
+			}
+			//将生成的100个div放到 box下边，当做box的内容
+			box.innerHTML = str;
+			//var divAfter = document.querySelectorAll("#box div em");
+			//for循环 用this指针 当鼠标移入em时，其颜色变成透明
+			for(var m=0;m<100;m++){
+				divAfter[m].onmouseover = function (){
+					this.style.opacity = 0;
+					this.style.transition = "1s";
+					
+				}
+			}
+		}
+	</script>
+</head>
+<body>
+	<div id="box">
+		<!-- <div><em></em></div> -->
+	</div>
+</body>
+</html>
