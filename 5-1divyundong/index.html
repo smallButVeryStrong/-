@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title></title>
+		<style>
+			div{
+				width: 50px;
+				height: 50px;
+				background: red;
+				position: absolute;
+				left: 0px;
+				top:0px; 
+				-transition: .5s;
+			}
+		</style>
+		<script src="tween.js"></script>
+<script>
+	window.onload = function(){
+		var allDiv = document.getElementsByTagName("div");
+		for( var i = 0; i < allDiv.length; i++ ){
+			allDiv[i].style.left = i * 60 + "px";
+		}
+		var len = allDiv.length;
+		var n = 0;
+		var timer;
+		var onOff = true;
+		document.onclick = function(){
+			if( timer ) return;
+			target = onOff ? 300 : 0;
+			timer = setInterval(function(){
+				moveTween(allDiv[n],"top",500,target,"linear",function(){
+					if( n > len-1 ){
+						timer = null;
+						n = 0;
+						onOff = !onOff;
+					}
+				});
+				n++;
+				if( n > len-1 ){
+					clearInterval(timer);
+				}
+			},100);
+		}
+	}
+
+
+</script>
+	</head>
+
+	<body>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+	</body>
+</html>
