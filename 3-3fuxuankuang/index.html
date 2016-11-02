@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<style>
+	body {
+		margin: 0;
+		font-size: 0;
+	}
+	ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	input {
+		margin: 0;
+		padding: 0;
+		outline: none;
+	}
+	strong {
+		font-weight: normal;
+	}
+	#box {
+		margin: 30px auto 0;
+		width: 318px;
+		border-top: 1px solid #000;
+		border-bottom: 1px solid #000;
+	}
+	.list li {
+		padding-left: 17px;
+		height: 30px;
+		border-top: 1px solid #fff;
+		border-bottom: 1px solid #fff;
+		line-height: 30px;
+		font-family: "微软雅黑";
+	}
+	.list li input {
+		margin-right: 15px;
+	}
+	.list li span {
+		display: inline-block;
+		width: 165px;
+		font-size: 12px;
+	}
+	.list li strong {
+		display: inline-block;
+		width: 100px;
+		font-size: 12px;
+	}
+	.title {
+		border-top: 1px solid #000;
+		padding-left: 17px;
+		height: 30px;
+		font: 12px/30px "微软雅黑";
+	}
+</style>
+<script>
+	//鼠标移入 变成yellow
+	//鼠标点击 变成red
+	//关键点：每选中一个li，程序都会自动检测一次被选中的li的个数
+	window.onload = function (){
+		var oli = document.getElementsByTagName("li");
+		var libtn = document.querySelectorAll("li input");
+		var lastbtn = document.querySelectorAll(".title input")[0];
+
+		//封装函数  使奇数行li是一个颜色，偶数行的li是另外一个颜色
+		function fn(x){
+			if( i % 2 == 0 ){
+				oli[x].style.background = "";
+			}else{
+				oli[x].style.background = "#efefef";
+			}
+		}
+		//循环开始，使每一个li都具有一下代码的特性
+		for( var i = 0; i < oli.length; i++ ){
+			//自定义函数  记录下标
+			oli[i].index = i;
+			//自定义函数 记录当前的状态
+			oli[i].status = true; //li初始的状态都为真
+			//调用封装函数，使奇数行li是一个颜色，偶数行li是另外一个颜色
+			fn(i);
+
+			//鼠标移入
+			oli[i].onmouseover = function (){
+				//li的初始状态为true，当li没有被选中时状态依然为true，被选中后状态变为false，因此当li没有被选中时执行 yellow，选中之后执行red
+				if( this.status ){
+					this.style.background = "yellow";
+				}else{
+					this.style.background = "red";
+				}
+			}
+			//鼠标移出
+			oli[i].onmouseout = function (){
+				//li初始状态为true，选中状态为false，没有被选中状态为true，当没有选中时，鼠标移出 相应的li的颜色变为初始状态的颜色，当被选中时，鼠标移出，该li的颜色为red
+				if( this.status ){
+					fn(this.index);
+				}else{
+					this.style.background = "red";
+				}
+			}
+			//鼠标点击
+			oli[i].onclick = function (){
+				//li的默认状态为真，因此选中之后，if判断条件成立，执行第一段代码
+				if( this.status ){
+					//把该li相对应的input.checked变为true
+					libtn[this.index].checked = true;
+					//把该li背景颜色变为red
+					this.style.background = "red";
+					//把该li的状态变为false
+					this.status = false;
+				}else{//如果该li已经被选中，点击之后
+					//相对应的input.checked变为false
+					libtn[this.index].checked = false;
+					//该li的状态变为true
+					this.status = true;
+					//调用函数，使该li与初始颜色相同
+					fn(this.index);
+				}
+				//判断是否全选
+				//从上可知，当li被选中之后，该li状态为false
+				//因此在这里用 this.status==false 判断，当一个li被点击之后
+				if( this.status==false ){
+					//初始化h值为0
+					var h=0;
+					//for循环将所有的li检测一遍
+					for( var j = 0; j<libtn.length;j++ ){
+						//如果对应的input状态为true
+						if(libtn[j].checked){
+							//h的值就加1
+							h++;
+						}
+					}
+					//如果h的值和input的数目相同，代表所有的li都被选中，因此，全选按钮lastbtn.checked = true;被选中
+					if(h==libtn.length){
+						lastbtn.checked = true;
+					}
+				}else{//否则 全选按钮不选中
+					lastbtn.checked = false;
+				}
+			}
+		}
+		//点击全选按钮
+		lastbtn.onclick = function (){
+			//点击事件发生之后 this.checked值瞬间改变
+			if( this.checked ){//如果该按钮被选中
+				for( var m = 0; m < libtn.length; m++ ){
+					//li里边的input都选中
+					libtn[m].checked = true;
+					//所有的li状态变为false
+					oli[m].status = false;
+					//所有li的北京颜色变为red
+					oli[m].style.background = "red";
+				}
+			}else{//如果该按钮没有被选中，
+				for( var m = 0; m < libtn.length; m++ ){
+					//li里边的input都不选中
+					libtn[m].checked = false;
+					//所有的li状态都变为true
+					oli[m].status = true;
+					//调用函数 使所有li背景颜色恢复至默认状态
+					fn(m);
+				}
+			}
+		}
+	}
+</script>
+</head>
+<body>
+<section id="box">
+	<ul class="list">
+		<li >
+			<input type="checkbox" id="list1"/>
+			<span>私奔</span>
+			<strong>梁博</strong>
+		</li>
+		<li>
+			<input type="checkbox" id="list2"/>
+			<span>北京北京</span>
+			<strong>梁博、黄勇</strong>
+		</li>
+		<li>
+			<input type="checkbox" id="list3"/>
+			<span>我爱你中国</span>
+			<strong>梁博</strong>
+		</li>
+		<li>
+			<input type="checkbox" id="list4"/>
+			<span>花火</span>
+			<strong>梁博</strong>
+		</li>
+		<li>
+			<input type="checkbox" id="list5"/>
+			<span>回来</span>
+			<strong>梁博</strong>
+		</li>
+		<li>
+			<input type="checkbox" id="list6"/>
+			<span>爱要有你才完美</span>
+			<strong>梁博</strong>
+		</li>
+	</ul>
+	<div class="title">
+		<label>
+			<input type="checkbox"/>
+			<span>全选</span>
+		</label>
+		<input type="button" value="收藏"/>
+		<input type="button" value="添加"/>
+		<input type="button" value="删除"/>
+	</div>
+</section>
+</body>
+</html>
