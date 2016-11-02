@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        td {
+            text-align: center;
+        }
+    </style>
+    <script>
+
+        //在页面加载完成的时候，把下面这个数据动态添加到表格中
+        var data = [
+            {
+                 'id' : 1,
+                'username' : 'LEO',
+                'age' : 36,
+                'sex' : '男'
+            },
+            {
+                'id' : 2,
+                'username' : 'MOMO',
+                'age' : 16,
+                'sex' : '男'
+            },
+            {
+                'id' : 3,
+                'username' : 'DUODUO',
+                'age' : 29,
+                'sex' : '男'
+            },
+            {
+                'id' : 4,
+                'username' : '勇升',
+                'age' : 46,
+                'sex' : '男'
+            },
+            {
+                'id' : 5,
+                'username' : '小美',
+                'age' : 40,
+                'sex' : '女'
+            }
+        ];
+    </script>
+    <script src="tools.js"></script>
+    <script>
+        window.onload = function(){
+            //获取 姓名 年龄 性别元素
+            var userName = $("#userName");
+            var age = $("#age");
+            var sex = $("#sex");
+            //获取tbody 点击添加按钮
+            var tbody = $("tbody")[0];
+            //打开之后，根据已有的数据，渲染结构
+            function strOldHTML(){ 
+                var strOld = "";
+                for( var i = 0;i < data.length;i++ ){
+                    //这里为什么写var disabledStatues 就不对
+                    var disabledStatues = null;
+                    if( data[i].statues ){
+                        disabledStatues = "checked";
+                    }
+                    strOld += '<tr>' 
+                        +'<td>'
+                        +'<input type="checkbox"'+disabledStatues+'/>'
+                        +'</td>'
+                        +'<td>'+data[i].id+'</td>'
+                        +'<td>'+data[i].username+'</td>'
+                        +'<td>'+data[i].age+'</td>'
+                        +'<td>'+data[i].sex+'</td>'
+                        +'<td>'
+                        +'<a href="javascript:;">删除</a>'
+                        +'</td>'
+                        +'</tr>'
+                }
+                return strOld;
+            }
+            tbody.innerHTML = strOldHTML();
+            //获取添加按钮
+            var add = $("#add");
+            //封装函数，向结构中添加一条tr
+            //声明变量 记录id
+            var idCount = data.length;
+            function addTr(){
+                var newTr = document.createElement("tr");
+                var str = "";
+                idCount++;
+                str = '<td>'
+                    +'<input type="checkbox"/>'
+                    +'</td>'
+                    +'<td>'+idCount+'</td>'
+                    +'<td>'+userName.value+'</td>'
+                    +'<td>'+age.value+'</td>'
+                    +'<td>'+sex.value+'</td>'
+                    +'<td>'
+                    +'<a href="javascript:;">删除</a>'
+                    +'</td>'
+                newTr.innerHTML = str;
+                return newTr;
+            }
+            //点击添加按钮，向tbody里添加一个tr
+            add.onclick = function(){
+                console.log(idCount)
+                if( userName.value.trim() == "" ){
+                    alert("请输入姓名");
+                    return;
+                }
+                if( age.value.trim() == "" ){
+                    alert("请输入年龄");
+                    return;
+                }
+                //如果添加元素 全选按钮应该处于可选状态
+                if( checkAll.disabled ){
+                    checkAll.disabled = false;
+                }
+                //将该学员的数据添加到data数据结构中
+                var newData = {
+                    'id' : idCount,
+                    'username' : userName.value,
+                    'age' : age.value,
+                    'sex' : sex.value,
+                };
+                data.push(newData);
+                if( ageSort.statues == null ){//如果没有点击过排序 
+                    tbody.appendChild(addTr());
+                    var newA = tbody.lastElementChild.lastElementChild.lastElementChild;
+                    //给新增加的tr添加点击删除事件
+                    deleteTr(newA);
+                }
+                if( ageSort.statues == false ){//则从小到大排序
+                    //重新渲染数据，按照顺序排列
+                    tbody.innerHTML = "";
+                    data.sort(function(a,b){
+                        return a.age - b.age;
+                    });
+                    idCount++;
+                    newData.id = idCount;
+                    console.log(newData.id)
+                    tbody.innerHTML = strOldHTML();
+                }
+                if( ageSort.statues == true ){//则从小到大排序
+                    //重新渲染数据，按照顺序排列
+                    tbody.innerHTML = "";
+                    data.sort(function(a,b){
+                        return b.age - a.age;
+                    });
+                    idCount++;
+                    newData.id = idCount;
+                    tbody.innerHTML = strOldHTML();
+                }
+                //给重新渲染的tr添加点击删除事件
+                for( var i = 0;i < oA.length;i++ ){
+                    deleteTr(oA[i]);
+                }
+                //重新排序之后，添加全选事件
+                btnTrChecked(); 
+                //当添加的时候实时监测 是否全选
+                if( whoSelect().length == btnTr.length ){
+                    checkAll.checked = true;
+                }else{
+                    checkAll.checked = false;
+                }
+            }
+            //点击后面删除按钮a，删除当前tr
+            var oA = $("a");
+            for( var i = 0;i < oA.length;i++ ){
+                deleteTr(oA[i]);
+            }
+            //给每个tr添加后面的点击事件 封装函数
+            //obj为当前的删除按钮a  这个地方看看老师怎么处理？？？？
+            function deleteTr(obj){
+                obj.onclick = function(){
+                    //删除tr
+                    this.parentNode.parentNode.remove(this.parentNode);
+                    //删除对应的数据
+                    var thisDataId = this.parentNode.parentNode.children[1].innerHTML;
+                    for( var i = 0;i < data.length;i++ ){
+                        if( thisDataId == data[i].id ){
+                            data.splice(i,1)
+                            //当tr全部删除的时候，全选按钮处于不能点击的状态
+                            if( btnTr.length == 0 ){
+                                checkAll.disabled = true;
+                            }
+                        }
+                    }
+                    //当删除的时候实时监测 是否全选
+                    if( whoSelect().length == btnTr.length && btnTr.length != 0){
+                            checkAll.checked = true;
+                        }else{
+                            checkAll.checked = false;
+                    }
+                }
+            }
+
+            //全选
+            //封装函数 whoSelect
+            //首先获取tbody里边的input
+            var btnTr = $("input",tbody);
+            function whoSelect(){
+                var arr = [];
+                for( var i = 0;i < btnTr.length;i++ ){ 
+                    if( btnTr[i].checked ){
+                        arr.push(btnTr[i].parentNode.parentNode);
+                    }
+                }
+                return arr;
+            }
+            //获取全选按钮
+            var checkAll = $("#checkAll");
+            //点击 btnTr 按钮 如果btnTr全部选中，则全选按钮选中
+            btnTrChecked();
+            function btnTrChecked(){
+                for( var i = 0;i < btnTr.length;i++ ){
+                    btnTr[i].onclick = function(){
+                        if( this.checked ){//如果是真，找到对应的数据
+                            for( var j = 0;j < data.length;j++ ){
+                                if( data[j].id == this.parentNode.parentNode.children[1].innerHTML ){
+                                    //给这个加一个状态statues
+                                    data[j].statues = true;
+                                }
+                            }
+                        }else{//如果取消选中 这个状态就是假
+                           for( var j = 0;j < data.length;j++ ){
+                                if( data[j].id == this.parentNode.parentNode.children[1].innerHTML ){
+                                    //给这个加一个状态statues
+                                    data[j].statues = false;;
+                                }
+                            } 
+                        }
+                        if( whoSelect().length == btnTr.length ){
+                            checkAll.checked = true;
+                        }else{
+                            checkAll.checked = false;
+                        }
+                    }
+                }
+            }
+            //点击全选按钮，所有btnTr都全选，
+            checkAll.onclick = function(){
+                checkAllEvent();
+            }
+            //给tr添加全选事件处理
+            function checkAllEvent(){
+                if( checkAll.checked ){  
+                    for( var i = 0;i < btnTr.length;i++ ){
+                        btnTr[i].checked = checkAll.checked;
+                    }
+                    //改变所有数据的状态
+                    for( var i = 0;i < data.length;i++ ){          
+                        data[i].statues = true;
+                    }
+                }else{
+                    for( var i = 0;i < btnTr.length;i++ ){
+                        btnTr[i].checked = checkAll.checked;
+                    }
+                    //改变所有数据的状态
+                    for( var i = 0;i < data.length;i++ ){          
+                        data[i].statues = false;
+                    }
+                }
+            }
+            //批量删除
+            //获取批量删除按钮
+            var delectAll = $("#delectAll");
+            delectAll.onclick = function(){
+                var delectAllDataArr = [];
+                var whoSelectArr = whoSelect();
+                //删除被选中结构
+                for( var i = 0;i < tbody.children.length;i++ ){
+                    for( var j = 0;j < whoSelectArr.length;j++ ){
+                        if( tbody.children[i] == whoSelectArr[j] ){
+                            
+                            delectAllDataArr.push(tbody.children[i].children[1].innerHTML);
+                            tbody.removeChild(tbody.children[i]);
+                        }
+                    }
+                }
+                //删除被选中结构的数据
+                for( var i = 0;i < delectAllDataArr.length;i++ ){
+                    for( var j = 0;j < data.length;j++ ){
+                        if( delectAllDataArr[i] == data[j].id ){
+                            data.splice(j,1);
+                            j--;
+                        }
+                    }
+                    
+                }
+                //当数据全部删除的时候 checkAll为false
+                if( !data.length ){
+                    checkAll.checked = false;
+                    checkAll.disabled = true;
+                }
+            }
+            //排序 重新渲染html结构
+            //获取重新排序按钮
+            var ageSort = $("#ageSort");
+            //定义自定义属性，记录ageSort的状态
+            ageSort.statues = null;
+            var k = 0
+            ageSort.onclick = function(){
+                //重新渲染数据，按照顺序排列
+                tbody.innerHTML = "";
+                if( ageSort.statues ){
+
+                    data.sort(function(a,b){
+                        return a.age - b.age;
+                    })
+                }else{
+                    data.sort(function(a,b){
+                        return b.age - a.age;
+                    })
+                }
+                //用来改变ageSort.statues状态
+                if( k%2 ){
+                    ageSort.statues = false;
+                }else{
+                    ageSort.statues = true;
+                }
+                k++;
+                tbody.innerHTML = strOldHTML();
+                //给重新渲染的tr添加点击删除事件
+                for( var i = 0;i < oA.length;i++ ){
+                    deleteTr(oA[i]);
+                }
+                //重新渲染之后添加全选处理事件
+                btnTrChecked(); 
+            }
+            
+        }
+    </script>
+</head>
+
+<body>
+
+<form action="" name="form">
+    <p>
+        姓名:<input type="text" id="userName" name="username"/>
+    </p>
+    <p>
+        年龄:<input type="text" id="age" name="age"/>
+    </p>
+    <p>
+        性别: <select name="sex" id="sex">
+            <option value=" 男 ">男</option>
+            <option value="女">女</option>
+        </select>
+    </p>
+    <p>
+        <input type="button" id="add" value="添加" name="add"/>
+    </p>
+</form>
+<input type="button" id="delectAll" value="批量删除"  class="btn"> 
+<input type="button" value="年龄从小到大" id="ageSort"  class="btn"> 
+<table id="tab1" width="100%" border="1">
+    <thead>
+        <tr>
+            <th>
+            <input id="checkAll" type="checkbox" /> 全选
+            </th>
+            <th>ID</th>
+            <th>姓名</th>
+            <th>年龄</th>
+            <th>性别</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+    <!-- <tr>
+    <td>
+    <input type="checkbox"/>
+    </td>
+    <td>1</td>
+    <td>LEO</td>
+    <td>36</td>
+    <td>男</td>
+    <td>
+    <a href="javascript:;">删除</a>
+    </td>
+    </tr> -->
+    </tbody>
+</table>
+</body>
+</html>
