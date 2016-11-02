@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>两组图片配合切换</title>
+<style>
+body {
+	margin: 0;
+	font-size: 12px;
+	color: #000;
+}
+input {
+	padding: 0 13px;
+	line-height: 12px;
+	font-size: 12px;
+	outline: none;
+	border: 2px solid #efefef;
+	background: #fff;
+	border-radius: 8px;
+}
+img {
+	border: none;
+	vertical-align: top;
+}
+p {
+	margin: 0;
+}
+.clearFix:after {
+	content: "";
+	display: block;
+	clear: both;
+}
+#box {
+	margin: 0 auto;
+	padding-top: 54px;
+	width: 873px;
+	height: 496px;
+	border-top: 1px solid #000;
+	background: url(img/bg.png) no-repeat;
+}
+.top {
+	margin-left: 22px;
+}
+.bottom {
+	margin-top: 42px;
+}
+.bottom_left {
+	float: left;
+	width: 448px;
+	margin-left: 49px;
+}
+.bottom_left img {
+	width: 448px;
+	height: 245px;
+}
+.bottom_right {
+	float: right;
+	width: 248px;
+	margin-right: 66px;
+}
+.bottom_right img {
+	width: 248px;
+	height: 245px;
+}
+.bottom_left p:nth-of-type(1),
+.bottom_right p:nth-of-type(1) {
+	line-height: 32px;
+	font-weight: bold;
+	text-align: center;
+}
+.bottom_left p:nth-of-type(2),
+.bottom_right p:nth-of-type(2) {
+	line-height: 20px;
+}
+</style>
+<script>
+window.onload = function (){
+	var bottomLeft = document.getElementsByClassName("bottom_left")[0];
+	var bottomRight = document.getElementsByClassName("bottom_right")[0];
+	var bottomLeftImg = bottomLeft.getElementsByTagName("img")[0];
+	var bottomRightImg = bottomRight.getElementsByTagName("img")[0];
+	var upbtn = document.getElementById("upbtn");
+	var downbtn = document.getElementById("downbtn");
+	var leftP1 = document.getElementsByClassName("left_p1")[0];
+	var leftP2 = document.getElementsByClassName("left_p2")[0];
+	var rightP1 = document.getElementsByClassName("right_p1")[0];
+	var rightP2 = document.getElementsByClassName("right_p2")[0];
+	var arrLeft = ["img/left1.png","img/left2.png","img/left3.png","img/left4.png"];
+	var arrLeftP1 = ["第一组第一张图","第一组第二张图","第一组第三张图","第一组第四张图"];
+	var arrRightP1 = ["第二组第一张图","第二组第二张图","第二组第三张图"];
+	var arrRight = ["img/right1.png","img/right2.png","img/right3.png"];
+	var lt = 3;  //用这个变量控制打开的时候是第几张
+	var rt = 0;
+	var onoff = true;
+	function downL(){
+	 	if(onoff){
+	 		lt++;
+	 		if( lt > arrLeft.length-1 ){
+	 			lt = 0;
+	 		}
+	 	}else{
+	 		lt--;
+	 		if( lt < 0 ){
+	 			lt = arrLeft.length-1;
+	 		}
+	 	}
+	 	bottomLeftImg.src = arrLeft[lt];
+	 	leftP1.innerHTML = arrLeftP1[lt];
+	 	leftP2.innerHTML = lt+1+"/"+arrLeft.length;
+	};
+	function downR(){
+	 	if( onoff ){
+	 		rt++;
+	 		if( rt > arrRight.length-1 ){
+	 			rt = 0;
+	 		}
+	 	}else{
+	 		rt--;
+	 		if( rt < 0 ){
+	 			rt = arrRight.length-1;
+	 		}
+	 	}
+	 	bottomRightImg.src = arrRight[rt];
+	 	rightP1.innerHTML = arrLeftP1[rt];
+	 	rightP2.innerHTML = rt+1+"/"+arrRight.length;
+	};
+	//直接使用 只需要改变lt 和 rt的值 就可以改变初始的图片状态
+	lt--;
+	rt--;
+	downL();
+	downR();
+	//点击左边图片  图片轮播切换
+	downbtn.onclick = function (){
+	 	onoff = true;
+	 	downL();
+	 	downR();
+	 }
+	 upbtn.onclick = function (){
+	 	onoff = false;
+	 	downL();
+	 	downR();
+	}
+	bottomLeftImg.onclick = function (){
+	 	downL();
+	}
+	 //点击右边图片  图片轮播切换
+	bottomRightImg.onclick = function (){
+	 	downR();
+	}
+}
+</script>
+</head>
+<body>
+<section id="box">
+	<div class="top">
+		<input type="button" value="上一组" id="upbtn"/>
+		<input type="button" value="下一组" id="downbtn"/>
+	</div>
+	<div class="bottom classFix">
+		<div class="bottom_left">
+			<img src="img/left1.png">
+			<p class="left_p1">第一组第一张</p>
+			<p class="left_p2">1/4</p>
+		</div>
+		<div class="bottom_right">
+			<img src="img/right1.png">
+			<p class="right_p1">第二组第一张</p>
+			<p class="right_p2">1/3</p>
+		</div>
+	</div>
+</section>
+</body>
+</html>
