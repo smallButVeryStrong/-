@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>手机聊天第四个文件</title>
+	<style>
+		body {
+			margin: 0;
+		}
+		img {
+			border: none;
+			vertical-align: top;
+		}
+		input {
+			outline: none;
+			padding: 0;
+		}
+		textarea {
+			padding: 0;
+			margin: 0;
+			outline: none;
+			overflow: hidden;
+			resize: none;
+		}
+		ul {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+		.clearFix:after {
+			content: "";
+			display: block;
+			clear: both;
+		}
+		@keyframes sun {
+			0% {
+				left: -700px;
+				opacity: 0;
+			}
+			100% {
+				left: 0;
+				opacity: 1;
+			}
+		}
+		#box {
+			position: relative;
+			animation: 1.5s sun;
+			margin: 30px auto;
+			padding: 87px 0 0 26px;
+			width: 274px;
+			height: 503px;
+			background: url(img/3.png) no-repeat;
+			background-size: 100% 100%;
+		}
+		#list {
+			width: 237px;
+			height: 370px;
+			overflow: auto;
+		}
+		#write {
+			padding-top: 7px;
+			width: 237px;
+			height: 41px;
+			border-top: 1px solid #bdcec6;
+			background: #f7f7f7;
+		}
+		#write span {
+			float: left;
+			margin: 0 5px 0 4px;
+			padding: 6px 0 0 3px;
+			width: 27px;
+			height: 28px;
+			border: 1px solid #ded6e7;
+			border-radius: 5px;
+		}
+		#text {
+			float: left;
+			width: 140px;
+			padding: 9px 0;
+			height: 16px;
+			border: 1px solid #ded6e7;
+			border-radius: 5px;
+			font: 16px/1 "微软雅黑";
+		}
+		#btn {
+			float: left;
+			margin-left: 5px;
+			border: none;
+			height: 36px;
+			font: 22px/36px "微软雅黑";
+			color: #8c8494;
+			background: #f7f7f7;
+		}
+		.listLi1 {
+			margin-top: 6px;
+			padding-left: 14px;
+		}
+		.listLi1 img {
+			float: left;
+		}
+		.listLi1 span {
+			float: left;
+			margin-left: 6px;
+			max-width: 183px;
+			font: 12px/19px "微软雅黑";
+			color: #212110;
+			background: #ded6e7;
+			word-break: break-all;
+		}
+		.listLi2 {
+			margin-top: 6px;
+			padding-right: 14px;
+		}
+		.listLi2 img {
+			float: right;
+		}
+		.listLi2 span {
+			float: right;
+			margin-right: 6px;
+			max-width: 183px;
+			font: 12px/19px "微软雅黑";
+			color: #212110;
+			background: #ded6e7;
+			word-break: break-all;
+		}
+	</style>
+	<script>
+		window.onload = function (){
+			var oBtn = document.getElementById("btn");
+			var oText = document.getElementById("text");
+			var oList = document.getElementById("list");
+			var oBox = document.getElementById("box");
+			var oWrite = document.getElementById("write");
+			var oImgs = document.getElementById("imgs");
+
+			var onoff = false;
+			imgs.onclick = function (){
+				if( onoff ){
+					imgs.src = "img/1.png";
+					onoff = false;
+				}else{
+					imgs.src = "img/2.png";
+					onoff = true;
+				}
+			}
+			btn.onclick = function (){
+				if( onoff ){
+					var liClassName = "listLi2";
+				}else{
+					var liClassName = "listLi1";
+				}
+				list.innerHTML = list.innerHTML + '<li class="'+liClassName+' clearFix"><img src='+imgs.src+'><span>'+text.value+'</span></li>';
+
+				text.value = "";
+			}
+
+		}
+	</script>
+</head>
+<body>
+	<div id="box">
+		<ul id="list">
+			<!-- <li class="listLi1 clearFix">
+				<img src="img/1.png">
+				<span>哈哈，这是我的第一句话</span>
+			</li>
+			<li class="listLi2 clearFix">
+				<img src="img/2.png">
+				<span>哈哈，这是我的第一句话</span>
+			</li> -->
+		</ul>
+		<div id="write" class="clearFix">
+			<span><img src="img/1.png" id="imgs"></span>
+			<textarea id="text"></textarea>
+			<input type="button" value="发送" id="btn"/>
+		</div>
+	</div>
+</body>
+</html>
