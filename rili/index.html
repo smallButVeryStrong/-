@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>win10日历</title>
+<link href="css/index.css" rel="stylesheet"/>
+
+</head>
+<body>
+<section id="calendar">
+	<div class="calendar">
+		<div class="clock">
+			<canvas id="myCanvas" width="144" height="144"></canvas>
+		</div>
+		<p class="newDate">xx年xx月xx日，星期xx</p>
+		<div class="checkDate">
+			<strong>xx年xx月</strong>
+			<span class="upBtn btn">></span>
+			<span  class="downBtn btn"><</span>
+		</div>
+		<div>
+			<ul class="list1 clearFix">
+				<li>日</li>
+				<li>一</li>
+				<li>二</li>
+				<li>三</li>
+				<li>四</li>
+				<li>五</li>
+				<li>六</li>
+			</ul>
+			<ul class="list2 clearFix"></ul>
+		</div>
+		<div class="setTime">
+			<p class="set"><span></span>日期和时间设置</p>
+		</div>
+	</div>
+	<div class="change">
+		<p>
+			<span>更改日期和时间</span><br/>
+			<strong>xx年xx月xx日 24:00</strong>
+		</p>
+		<div class="changeDate">
+			<div class="changeYMD">
+				<p class="changeP">日期</p>
+				<select class="chiceYear"></select>
+				<select class="chiceMonth"></select>
+				<select class="chiceDate"></select>
+			</div>
+			<div class="changeHM">
+				<p class="changeP">时间</p>
+				<select class="chiceHours"></select>
+				<select class="chiceMinutes"></select>
+			</div>
+			<div class="changBtn clearFix">
+				<a href="javascript:;">取消</a>
+				<a href="javascript:;">更改</a>
+			</div>
+		</div>
+	</div>
+</section>
+<script src="js/tools.js"></script>
+<script src="js/date.js"></script>
+<script src="js/clock.js"></script>
+</body>
+</html>
