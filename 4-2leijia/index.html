@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+	em {
+		font-style: normal;
+	}
+	</style>
+	<script>
+	//获取元素 封装函数
+	function $(tagNames,classLi){
+		var parent = null;
+		//判断父级是什么
+		parent = classLi || document;
+		return parent.getElementsByTagName(tagNames)
+	}
+	window.onload = function(){
+		var list = document.getElementsByClassName("list")[0];
+		var list_li = $("li",list);
+		//该参数是共计有几件 
+		var number1 = 0;
+		//该参数为共计多少钱
+		var number2 = 0;
+		//该数组存储商品的单价，当商品数量为零时，单价重置为零
+		var arr = [,,,,];
+		//循环，使每个li具有相同的功能
+		for( var i = 0; i < list_li.length; i++ ){
+			//调用该函数  该函数实现每个li的 +  -  功能
+			fn(list_li[i],i)
+		}
+		//封装函数 实现 + - 功能
+		function fn( classLi,order){
+			var btn = $("input",classLi);
+			var ospan = $("span",classLi);
+			var oem = $("em",classLi)[0];
+			var op = $("p");
+			//记录每个li里商品的数量
+			var n = 0;
+			//封装函数  number3 为数组中最大的值，显示当前最高单价的商品
+			function fn1(){
+				var number3 = 0;
+				//循环数组里的值，找出最大值
+				for( var j = 0; j < arr.length; j++ ){
+					if( number3 < arr[j] ){
+						number3 = arr[j]
+					}
+				}
+				//显示每个li里商品的数量
+				ospan[0].innerHTML = n;
+				//显示每个li里总共多少钱
+				ospan[2].innerHTML = "小计：" + n*oem.innerHTML+"元";
+				//显示总共买了多少件商品，合计多少钱
+				op[0].innerHTML = "商品合计共"+number1+"件，共花费了："+number2+"元";
+				//显示当前商品的最高单价
+				op[1].innerHTML = "其中最贵的商品单价是："+number3+"元";
+			}
+			//点击按钮"-"实现递减功能
+			btn[0].onclick = function(){
+				if( n > 0 ){
+					n--;
+					number1--;
+					number2 -= (+oem.innerHTML);
+					//判断 如果该商品的数量为零，那么把其在数组的单价重置为0
+					if( n==0 ){
+						arr[order] = 0;
+					}
+					fn1();
+				}
+			}
+			btn[1].onclick = function(){
+				n++;
+				number1++;
+				number2 += (+oem.innerHTML);
+				//转成数字
+				arr[order] = (+oem.innerHTML);
+				fn1();
+			}
+
+		}	
+	}
+	</script>
+</head>
+<body>
+	<div id="box">
+		<ul class="list">
+			<li>
+				<input type="button" value="-"/>
+				<span>0</span>
+				<input type="button" value="+"/>
+				<span>单价：<em>12.5</em>元</span>
+				<span>小计：0元</span>
+			</li>
+			<li>
+				<input type="button" value="-"/>
+				<span>0</span>
+				<input type="button" value="+"/>
+				<span>单价：<em>10.5</em>元</span>
+				<span>小计：0元</span>
+			</li>
+			<li>
+				<input type="button" value="-"/>
+				<span>0</span>
+				<input type="button" value="+"/>
+				<span>单价：<em>8.5</em>元</span>
+				<span>小计：0元</span>
+			</li>
+			<li>
+				<input type="button" value="-"/>
+				<span>0</span>
+				<input type="button" value="+"/>
+				<span>单价：<em>8</em>元</span>
+				<span>小计：0元</span>
+			</li>
+			<li>
+				<input type="button" value="-"/>
+				<span>0</span>
+				<input type="button" value="+"/>
+				<span>单价：<em>14.5</em>元</span>
+				<span>小计：0元</span>
+			</li>
+		</ul>
+		<p>商品合计共0件，共花费了：0元</p>
+		<p>其中最贵的商品单价是：0元</p>
+	</div>
+</body>
+</html>
