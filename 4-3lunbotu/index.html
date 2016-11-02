@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body {
+			margin: 0;
+		}
+		p {
+			margin: 0;
+		}
+		img {
+			border: none;
+			vertical-align: top;
+		}
+		.clearFix:after {
+			content: "";
+			display: block;
+			clear: both;
+		}
+		#box {
+			position: relative;
+			margin: 30px auto 0;
+			height: 250px;
+			width: 250px;
+			overflow: hidden;
+		}
+		ul {
+			position: absolute;
+			top: 0;
+			left: 0;
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+		li {
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+		p {
+			position: absolute;
+			width: 50px;
+			height: 50px;
+			background: pink;
+			font: 20px/50px "微软雅黑";
+			text-align: center;
+		}
+		p:nth-of-type(1) {
+			top: 100px;
+			left: 0;
+		}
+		p:nth-of-type(2) {
+			top: 100px;
+			right: 0;
+		}
+		#div {
+			position: absolute;
+			left: 0;
+			bottom: 0;
+			width: 100%;
+			text-align: center;
+		}
+		#div a {
+			display: inline-block;
+			width: 30px;
+			height: 30px;
+			line-height: 30px;
+			font-size: 20px;
+			text-align: center;
+			text-decoration: none;
+			color: #000;
+			background: red;
+			border-radius: 15px;
+		}
+		#div a:nth-of-type(1) {
+			background: yellow;
+		}
+	</style>
+	<script src="tools.js"></script>
+	<script src="tween.js"></script>
+	<script>
+		window.onload = function(){
+			var oul = $("ul")[0];
+			var oli = $("li");
+			var op = $("p");
+			var oa = $("a");
+			var len = oli.length;
+			var oliW = parseFloat(getComputedStyle(oli[0]).width);
+			//重置图片的位置 为10000px  然后overflow
+			for( var i = 0; i < len ; i++ ){
+				oli[i].style.left = "10000px";
+			}
+			//默认显示第一张图片
+			oli[0].style.left = 0;
+			//记录图片的下标
+			var n = 0;
+			//记录上一张显示的图片
+			var old = 0;
+			//点击右侧按钮 图片向左走
+			op[1].onclick = function(){
+				//消除狂点效果
+				if( oul.timer ){
+					return;
+				}
+				moveL();
+			}
+			//点击左边按钮  图片向右移动
+			op[0].onclick = function(){
+				if( oul.timer ){
+					return;
+				}
+				n--;
+				if( n < 0 ){
+					n = len - 1;
+				}
+				moveLsun(n,false)
+			}
+			//自动循环
+			var timer2 = setInterval(moveL,1000); 
+			//图片向左运动代码 函数封装
+			function moveL(){
+				//将ul的left值重置为0
+				n++;
+				if( n > len - 1 ){
+					n = 0;
+				}
+				moveLsun(n,true);
+			} 
+			function moveLsun(xiabiao,statues){
+				var k;
+				if( statues ){
+					k = 1;
+				}else{
+					k = -1
+				}
+				oul.style.left = 0;
+				oli[old].style.left = 0;
+				oli[xiabiao].style.left = k*oliW + "px";//这个地方控制方向
+				moveTween(oul,"left",500,-k*oliW,"linear",function(){
+					oli[old].style.left = "10000px";
+					old = xiabiao;
+				});
+				for( var j = 0; j < oa.length; j++ ){
+					oa[j].style.background = "red";
+				}
+				oa[xiabiao].style.background = "yellow";
+			}
+			//鼠标移入 关闭自动播放
+			for( var i = 0; i < op.length; i++ ){
+				op[i].onmouseover = function(){
+					clearInterval(timer2);
+				}
+				op[i].onmouseout = function(){
+					timer2 = setInterval(moveL,1000); 
+				}
+			}
+			//移入小圆点  关闭自动播放
+			for( var i = 0; i < oa.length; i++ ){
+				oa[i].onmouseover = function(){
+					clearInterval(timer2);
+				}
+				oa[i].onmouseout = function(){
+					timer2 = setInterval(moveL,1000);
+				}
+				//点击小圆点切换图片 并改变小图片颜色
+				oa[i].index = i;
+				var message = 0;
+				oa[i].onclick = function(){
+					n = this.index;
+					if( message > this.index ){
+						moveLsun(n,false);
+					}else{
+						moveLsun(n,true);
+					}
+					message = this.index;
+				}
+			}
+		}
+	</script>
+</head>
+<body>
+	<div id="box">
+		<ul class="clearFix">
+			<li><img src="1.jpg"></li>
+			<li><img src="2.jpg"></li>
+			<li><img src="3.jpg"></li>
+			<li><img src="4.jpg"></li>
+			<li><img src="5.jpg"></li>
+		</ul>
+		<p><</p>
+		<p>></p>
+		<div id="div">
+			<a href="javascript:;">1</a>
+			<a href="javascript:;">2</a>
+			<a href="javascript:;">3</a>
+			<a href="javascript:;">4</a>
+			<a href="javascript:;">5</a>
+		</div>
+	</div>
+</body>
+</html>
