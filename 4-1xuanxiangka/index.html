@@ -1,0 +1,201 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>无标题文档</title>
+<style>
+body,ul{
+	padding: 0;
+	margin: 0;
+}
+li{
+	list-style: none;
+}
+.wrap{
+	width: 964px;
+	height: 328px;
+	padding: 8px 4px;
+	border:1px solid #c6c6c6;
+	margin: 10px auto;
+}
+.left{
+	float:left;
+	background: #e7e7e7;
+}
+.left li{
+	width: 146px;
+	height: 82px;
+	line-height: 82px;
+	text-align: center;
+	border-left: 1px solid #c6c6c6;
+	border-top:1px solid #c6c6c6;
+}
+.left .last_li{
+	border-bottom: 1px solid #c6c6c6;
+}
+.li_active{
+	background: #fff;
+}
+.right div{
+	float:left;
+	width: 812px;
+	height: 330px;
+	position: relative;
+	display: none;
+}
+.right img{
+	width: 812px;
+	height: 330px;
+	display: none;
+	
+}
+div.con_active{
+	display: block;
+}
+.right ul{
+	width: 812px;
+	position: absolute;
+	top:300px;
+	color:#000;
+}
+.right li{
+	float:left;
+	width: 33.2%;
+	height: 30px;
+	line-height: 30px;
+	font-size: 12px;
+	text-align: center;
+    background: #4a4a4a;
+    opacity: 0.6;
+    margin-right: 1px;
+    color:#fff;
+}
+.flex4 li{
+	width: 24.8%;
+}
+.right .li_color{
+	background: red;
+}
+.no_margin{
+	margin-right: 0;
+}
+img.img_active{
+	display: block;
+}
+</style>
+<script>
+function fnsroll(clickName,changeName,classNames){
+	for( var i = 0; i < clickName.length; i++ ){
+		clickName[i].index = i;
+		clickName[i].onclick = function(){
+			for(var j = 0; j < clickName.length ; j++ ){
+				changeName[j].style.display = "none";
+				clickName[j].className = "";	
+			}
+			changeName[this.index].style.display = "block";
+			this.className = classNames;
+		}
+	}
+}
+window.onload = function(){
+	//获取左边选项卡的li
+	var left = document.getElementById("left").getElementsByTagName("li");
+	var right_div = document.getElementById("right").getElementsByTagName("div");
+	//切换左边选项卡
+	// for( var i = 0; i < left.length; i++ ){
+	// 	left[i].index = i;
+	// 	left[i].onclick = function(){
+	// 		for(var j=0;j<left.length;j++){
+	// 			right_div[j].style.display = "none";
+	// 			left[j].className = "";	
+	// 		}
+	// 		right_div[this.index].style.display = "block";
+	// 		this.className = "li_active";
+	// 	}
+	// }
+	fnsroll(left,right_div,"li_active")
+	//切换右边选项卡
+	//获取右边选项卡的li
+	for( var m = 0; m < right_div.length; m++  ){
+		fn(m);
+	}
+	function fn(k){
+		var rightLi = right_div[k].getElementsByTagName("li");
+		var imgs = right_div[k].getElementsByTagName("img");
+		// for( var n = 0; n < rightLi.length; n++ ){
+		// 	rightLi[n].index = n;
+		// 	rightLi[n].onclick = function(){
+		// 		for(var j=0;j<rightLi.length;j++){
+		// 			imgs[j].style.display = "none";
+		// 			rightLi[j].className = "";	
+		// 		}
+		// 		imgs[this.index].style.display = "block";
+		// 		this.className = "li_color";
+		// 	}
+		// }
+		fnsroll(rightLi,imgs,"li_color");
+	}
+}
+</script>
+</head>
+
+<body>
+	<div class="wrap">
+		<ul class="left" id="left">
+			<li class="li_active">最热团购</li>
+			<li>商城特惠</li>
+			<li>名品推荐</li>
+			<li class="last_li">缤纷活动</li>
+		</ul>
+		<div class="right" id="right">
+			<div class="con_active">
+				<img src="images/img1.jpg" class="img_active"/>
+				<img src="images/img2.jpg" />
+				<img src="images/img3.jpg" />
+				<ul>
+					<li class="li_color">第一个第一项</li>
+					<li>第一个第二项</li>
+					<li class="margin-right">第一个第三项</li>
+				</ul>
+			</div>
+
+			<div>
+				<img src="images/img4.jpg" class="img_active"/>
+				<img src="images/img5.jpg" />
+				<img src="images/img6.jpg" />
+				<img src="images/img7.jpg" />
+				<ul class="flex4">
+					<li class="li_color">第二个第一项</li>
+					<li>第二个第二项</li>
+					<li>第二个第三项</li>
+					<li class="margin-right">第二个第四项</li>
+				</ul>
+			</div>
+
+			<div>
+				<img src="images/img8.jpg" class="img_active"/>
+				<img src="images/img9.jpg" />
+				<img src="images/img10.jpg" />
+				<ul>
+					<li class="li_color">第三个第一项</li>
+					<li>第三个第二项</li>
+					<li>第三个第三项</li>
+				</ul>
+			</div>
+
+			<div>
+				<img src="images/img11.jpg" class="img_active"/>
+				<img src="images/img12.jpg" />
+				<img src="images/img13.jpg" />
+				<img src="images/img1.jpg" />
+				<ul class="flex4">
+					<li class="li_color">第四个第一项</li>
+					<li>第四个第二项</li>
+					<li>第四个第三项</li>
+					<li class="margin-right">第四个第四项</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
