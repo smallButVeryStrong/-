@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>Document</title>
+<style>
+	body {
+		margin: 0px;
+		line-height: 30px;
+	}
+	h3,p {
+		margin: 0px;
+	}
+	input {
+		padding: 0;
+		outline: none;
+	}
+	img {
+		position: absolute;
+		top: -31px;
+		left: 0;
+		vertical-align: top;
+		width: 30px;
+		height: 30px;
+		cursor: pointer;
+	}
+	#box {
+		margin: 30px auto 0;
+		width: 800px;
+		text-align: center;
+	}
+	.game {
+		position: relative;
+		width: 800px;
+	}
+	.clickBox {
+		overflow: hidden;
+		position: absolute;
+		top: 0;
+		left: 0;
+		margin-top: 20px;
+		width: 800px;
+		height: 450px;
+		border: 1px solid #000;
+	}
+	.score {
+		position: absolute;
+		top: 20px;
+		left: -151px;
+		width: 150px;
+		height: 80px;
+		border: 1px solid #000;
+	}
+</style>
+<script src="tools.js"></script>
+<script src="tween.js"></script>
+<script>
+	window.onload = function(){
+		var imgs = $("img");
+		var btn = $("input")[0];
+		var score = $(".score")[0];
+		var op = $("p",score);
+		var timer;
+		//用来记录第一个笑脸运动的时间，也就是最长的运动时间
+		var moveTimeStart = 10000;
+		//控制tween的时间 单位ms
+		var m = moveTimeStart;
+		//点击的数量
+		var k = 0;
+		//没有点击的数量
+		var h = 0;
+		//首先生成一个随机数，便于清掉狂点的情况
+		var n = Math.floor(Math.random()*8);
+		for( var i = 0;i < imgs.length;i++ ){
+			imgs[i].style.left = (i+1) * 85 + "px";
+		}
+		//生成抖动的数组
+		var arr = [];
+		for( var j = 30;j > 0; j -= 3){
+			arr.push(j);
+			arr.push(-j);
+		}
+		arr.push(0);
+		//点击开始游戏按钮
+		btn.onclick = function(){
+			//用初始的随机数，防止狂点情况出现
+			if( imgs[n].timer ){
+				return;
+			}
+			//当再次点击的时候 将 h 和 k 清空为零
+			h = 0;
+			k = 0;
+			//将得分和失分重置为0
+			op[0].innerHTML = "得分："+k+"分";
+			op[1].innerHTML = "失分："+h+"分";
+			//点击重置btn的内容
+			btn.value = "游戏进行中……"
+			//调用自动播放函数
+			moveOver();
+		}
+		//封装自动运动函数
+		function moveOver(){
+			var clickBox = $(".clickBox")[0];
+			//img的top值重置为0
+			imgs[n].style.top = 0;
+			//记录上一个img
+			var nowimgs = imgs[n];
+			//调用运动函数
+			moveTween(imgs[n],"top",m,450,"linear",function(){
+				imgs[n].style.top = "-30px";//当运动完成后，将图片top重置为-3opx
+				var j = 0;//定义变量 记录抖动函数数组的下标值
+				h++;//记录失分
+				if( h > 10 ){//当失分大于10的时候
+					clearInterval(nowimgs.timer);//清除当前运动定时器
+					nowimgs.timer = null;
+					alert( "游戏失败,请重新开始" );
+					//当游戏结束时，还要重置初始值，否则m一直是500
+					m = moveTimeStart;
+					//重置点击按钮的value值
+					btn.value = "开始游戏";
+					return;
+				}
+				timer = setInterval(function(){
+					clickBox.style.top = arr[j] + "px";//如果没有点中，则clickBox发生抖动
+					j++;
+					op[1].innerHTML = "失分："+h+"分";
+					if( j > arr.length ){
+						clearInterval(timer);
+						timer = null;
+					}
+				},16);
+				if( m > 2000 ){
+					m -= 500;
+				}
+				//如果没有点击的情况，自动重新生成 n
+				n = Math.floor(Math.random()*8);
+				return moveOver();//递归
+			});
+		}
+		
+		//鼠标击中小图标
+		for( var i = 0;i < imgs.length;i++ ){
+			imgs[i].onmousedown = function(){
+				//解决狂点问题
+				if( timer ){
+					return;
+				}
+				//点击之后要重新生成n
+				n = Math.floor(Math.random()*8);
+				//清除当前点击的img上的定时器
+				clearInterval(this.timer);
+				k++;//得分++
+				op[0].innerHTML = "得分："+k+"分";
+				var pic = this.src;
+				//当前图片改成黑色的图片
+				this.src = "9.png";
+				var j = 0;//抖动函数数组下标
+				var _this = this;
+				//获取当前img的left值
+				var imgsLeft = parseInt(getComputedStyle(this).left);
+				timer = setInterval(function(){//开启定时器
+					_this.style.left = imgsLeft + arr[j] + "px";//该img发生抖动
+					j++;
+					if( j > arr.length ){//当抖函数运动完成
+						clearInterval(timer);//清除定时器
+						timer = null;
+						_this.style.top = "-30px";//重置当前img的top值
+						_this.src = pic;//重置当前img的图片
+						if( m > 2000 ){//图片运动的时间，当小于2000ms的时候，就固定在2000ms
+							m -= 500;
+						}
+						moveOver();//调用运动函数
+					}
+				},16);	
+			}
+		}
+	}
+</script>
+</head>
+<body>
+<div id="box">
+	<h3>你的鼠标右多快？</h3>
+	<p>游戏说明，点击“开始游戏”，随机掉下QQ表情，点中它，千万别让它掉下去！！</p>
+	<input type="button" value="开始游戏"/>
+	<div class="game">
+		<div class="score">
+			<p>得分：0分</p>
+			<p>失分：0分</p>
+		</div>
+		<div class="clickBox">
+			<img src="1.png">
+			<img src="2.png">
+			<img src="3.png">
+			<img src="4.png">
+			<img src="5.png">
+			<img src="6.png">
+			<img src="7.png">
+			<img src="8.png">
+		</div>
+	</div>
+</div>
+</body>
+</html>
