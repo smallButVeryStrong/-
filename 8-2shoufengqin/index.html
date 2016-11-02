@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<style>
+
+li{
+list-style: none;
+}
+ul,li {
+padding: 0;
+margin:0;
+}
+.fold_wrap{width:1200px;overflow:hidden;margin:0 auto;}
+.fold_wrap ul{width:1200px;height:260px;margin:0 auto;overflow:hidden;}
+.fold_wrap  ul li{float:left;width:130px;height:260px;position:relative;overflow:hidden;cursor:pointer;}
+</style>
+<script src="jquery-2.2.2.min.js"></script>
+<script>
+	$(function(){
+		var sm = $("#sm");//获取ul
+		var lis = sm.find("li");//获取ul下的所有li
+		var totalW = sm.width();//获取总宽度
+		var imgW = 400;//一张图片的最大宽度
+		var len = lis.size();//图片的张数
+		//其他张数的宽度的目标值
+		var otherW = Math.floor((totalW - imgW)/(len-1));
+		//所有图片均分的宽度
+		var shareW = Math.floor(totalW/len);
+		//初始化
+		lis.width(otherW);//其他张尺寸初始
+		lis.eq(0).animate({width:imgW});//第一张初始400
+
+		var timer1,timer2;
+		lis.on("mouseover",function(){
+			clearInterval(timer1);
+			clearInterval(timer2);
+			//箭头函数里边的this在哪里定义就指向谁
+			timer1 = setInterval(()=>{
+				//获取当前移入图片的宽度
+				var currentW = $(this).width();
+				if( currentW < 400 ){//如果这张图片的宽度小于400
+					var otherTotalW = 0;//别的图片的总宽度
+					 lis.each((index,item)=>{//遍历图片
+					 	if( item !== this ){//排除当前移入的图片
+					 		var ow = $(item).width(),//获取当前图片的宽度
+					 		      speed = 0;//声明变量来当做速度
+					 		if( ow > otherW ){//如果当前图片宽度大于目标值
+					 			speed = Math.floor((ow - otherW)/6);//当前宽度减去目标值/6的到一个速度，并且有越来越慢的效果
+					 			speed = speed > 0 ? speed:1;//如果速度< = 0 那么让速度 = 1 保证到达目标值
+					 			var otw = ow - speed;//定时器走一次，图片减小之后的宽度
+					 			$(item).width(otw);//将otw给对应的图片
+					 		}
+					 		otherTotalW += ow - speed;//别的图片的总宽度
+					 	}
+					 })
+					 var w = totalW - otherTotalW;//当前移入图片的宽度
+					if( w > imgW ) w = imgW;//当> 400的时候，让他= 400
+					$(this).css({width:w});//给定图片的宽度
+				}else{
+					clearInterval(timer1);
+              				clearInterval(timer2);
+				}
+			},30)
+		})
+
+		//鼠标移出
+		lis.on( "mouseout",function(){
+			clearInterval(timer1);
+			clearInterval(timer2);
+			timer2 = setInterval(()=>{
+				//获取移出这张图片的宽度
+				var currentW = $(this).width();
+				//如果当前图片的宽度大于平均宽度
+				if( currentW > shareW ){
+					//其他图片的总宽度
+					var otherTotalW = 0;
+					//遍历图片
+					lis.each((index,item)=>{
+						if( item !== this ){//如果不是移出的照片
+							//获取宽度，定义速度
+							var ow = $(item).width(),speed = 0;
+							if( ow < shareW ){
+								//定义速度
+								speed = Math.floor((shareW - ow)/6);
+								speed = speed > 0 ? speed:1;
+								//让图片增加宽度
+								$(item).width(ow + speed);
+							}
+							//其他图片的总宽度
+							otherTotalW += ow + speed;
+						}
+					});
+
+					var w = totalW - otherTotalW;
+					//当前图片的宽度
+					$(this).width(w);
+				}else{
+					clearInterval(timer1);
+					clearInterval(timer2);
+				}
+			},30)
+		})
+	})
+</script>
+</head>
+
+<body>
+	<div class="fold_wrap">
+		<ul class="clearfix" id="sm">
+			<li>
+				<div style="height:100%;background: url(img/1.jpg) no-repeat center 0;"></div>
+			</li>
+			<li>
+				<div style="height:100%;background: url(img/2.jpg) no-repeat center 0;"></div>
+			</li>
+			<li>
+				<div style="height:100%;background: url(img/3.jpg) no-repeat center 0;"></div>
+			</li>
+			<li>
+				<div style="height:100%;background: url(img/4.jpg) no-repeat center 0;"></div>
+			</li>
+			<li>
+				<div style="height:100%;background: url(img/5.jpg) no-repeat center 0;"></div>
+			</li>
+			<li>
+				<div style="height:100%;background: url(img/6.jpg) no-repeat center 0;"></div>
+			</li>
+			<li>
+				<div style="height:100%;background: url(img/7.jpg) no-repeat center 0;"></div>
+			</li>
+		</ul>
+	</div>
+</body>
+</html>
