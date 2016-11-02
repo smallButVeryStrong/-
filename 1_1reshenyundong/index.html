@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link href="css/index.css" rel="stylesheet"/>
+</head>
+<body>
+	<div id="box">
+		<div id="content">
+			<div id="content_row">
+				<span>请为下面的DIV设置样式:</span>
+				<input type="button" value="点击设置" id="btnclick"/>
+			</div>
+			<div id="change_box"></div>
+		</div>
+		<div id="mask"></div>
+		<form id="handle">
+			<table cellspacing="4px">
+				<tr>
+					<td class="td">请选择背景色：</td>
+					<td class="td1" id="td1">红</td>
+					<td class="td1 td1_more1" id="background2">黄</td>
+					<td class="td1 td1_more2" id="background3">蓝</td>
+				</tr>
+				<tr>
+					<td class="td">请选择宽(px):</td>
+					<td class="td2" id="width1">200</td>
+					<td class="td2" id="width2">300</td>
+					<td class="td2" id="width3">400</td>
+				</tr>
+				<tr>
+					<td class="td">请选择高(px):</td>
+					<td class="td2" id="height1">200</td>
+					<td class="td2" id="height2">300</td>
+					<td class="td2" id="height3">400</td>
+				</tr>
+			</table>
+			<div class="but">
+				<input type="button" value="恢复" id="but1"/>
+				<input type="button" value="确定" id="but2"/>
+			</div>
+		</form>
+	</div>
+	<script src="js/index.js"></script>
+</body>
+</html>
